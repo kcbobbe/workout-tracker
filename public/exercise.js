@@ -9,7 +9,9 @@ const repsInput = document.querySelector("#reps");
 const durationInput = document.querySelector("#duration");
 const resistanceDurationInput = document.querySelector("#resistance-duration");
 const distanceInput = document.querySelector("#distance");
+//blue complete button
 const completeButton = document.querySelector("button.complete");
+//green add exercise button
 const addButton = document.querySelector("button.add-another");
 const toast = document.querySelector("#toast");
 const newWorkout = document.querySelector(".new-workout")
