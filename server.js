@@ -56,6 +56,26 @@ app.get("/stats", (req, res) => {
 //   })
 // })
 
+app.get("/api/workouts/range" ,(req, res) => {
+  db.Workout.find({})
+  .then(Workout => {
+    res.json(Workout)
+  })
+  .catch(err => {
+    res.json(err);
+  });
+})
+
+// app.get("/api/workouts/:id", (req, res) => {
+//   db.Workout.findOne({_id: req.params.id})
+//   .then(Workout =>  {
+//     res.json(Workout)
+//   })
+//   .catch(err => {
+//     res.json(err);
+//   });
+// })
+
 app.get("/api/workouts" , (req, res) => {
   db.Workout.find({})
   .then(Workout => {
@@ -66,15 +86,7 @@ app.get("/api/workouts" , (req, res) => {
   })
 })
 
-app.get("/api/workouts/range" ,(req, res) => {
-  db.Workout.find({})
-  .then(Workout => {
-    res.json(Workout)
-  })
-  .catch(err => {
-    res.json(err);
-  });
-})
+
 
 // app.post("/api/workouts/" ,(req, res) => {
 //   db.Exercise.create(body)
