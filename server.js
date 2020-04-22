@@ -20,21 +20,6 @@ app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
-// db.Workout.create({})
-//   .then(dbWorkout => {
-//   console.log(dbWorkout)
-// })
-
-// db.Exercise.create(
-//   { 
-//     type: "Cardio",
-//     name: "Jogging",
-//     duration: 19,
-//     distance: 9
-//   })
-//   .then(dbExercise => {
-//     console.log(dbExercise)
-//   })
 
 // html routes
 app.get("/", (req, res) => {
@@ -49,15 +34,11 @@ app.get("/stats", (req, res) => {
   res.sendFile(path.join(__dirname, "public/stats.html"));
 })
 
-// app.get("/exercise" ,(req, res) => {
-//   db.Exercise.find({})
-//   .then(dbExercise => {
-//     res.send(dbExercise)
-//   })
-// })
 
 app.get("/api/workouts/range" ,(req, res) => {
-  db.Workout.find({})
+  console.log(new Date().setDate(new Date().getDate()-6))
+  db.Workout.find(
+  ).limit(7)
   .then(Workout => {
     res.json(Workout)
   })
@@ -86,14 +67,27 @@ app.get("/api/workouts" , (req, res) => {
   })
 })
 
-app.post("/api/workouts", (req, res) => {
-  let addedWorkout = {
-    day: new Date(),
-    exercises: []
-  };
-  db.Workout.insert(addedWorkout, (err, data) => {
-    res.json(data);
-  })
+// app.post("/api/workouts", (req, res) => {
+//   req.body.day = new Date(),
+//   req.body.exercises = []
+//   console.log(req.body, "req.body")
+//   db.Workout.insert(req.body, (err, data) => {
+//     if (err) {
+//       res.send(err)
+//     }
+//     res.send(data);
+//   })
+// })
+
+app.post("/api/workouts", ({ body }, res) => {
+  body.day = new Date(),
+  body.exercises = []
+  db.Workout.create(body)
+    .then(Workout => {
+      res.json(Workout)
+    }).catch(err => {
+      res.json(err)
+    })
 })
 
 app.put("/api/workouts/:id", (req, res) => {
@@ -106,31 +100,6 @@ app.put("/api/workouts/:id", (req, res) => {
       res.json(data);
   })
 })
-
-// app.put("/api/workouts/:id", (req, res) => {
-//   db.Workout.findOne({_id: req.params.id})
-//   .then(Workout =>  {
-//     res.json(Workout)
-//   })
-//   .catch(err => {
-//     res.json(err);
-//   });
-// })
-
-
-app.put("/submit")
-
-
-// app.post("/api/workouts/" ,(req, res) => {
-//   db.Exercise.create(body)
-//     .then
-//   .then(dbWorkout => {
-//     res.json(dbWorkout)
-//   })
-//   .catch(err => {
-//     res.json(err);
-//   });
-// })
 
 app.listen(PORT, () => {
   console.log(`App running on port ${PORT}!`);
