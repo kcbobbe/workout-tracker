@@ -1,5 +1,5 @@
 const express = require("express");
-// const mongojs = require("mongojs");
+const mongojs = require("mongojs");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -66,15 +66,15 @@ app.get("/api/workouts/range" ,(req, res) => {
   });
 })
 
-// app.get("/api/workouts/:id", (req, res) => {
-//   db.Workout.findOne({_id: req.params.id})
-//   .then(Workout =>  {
-//     res.json(Workout)
-//   })
-//   .catch(err => {
-//     res.json(err);
-//   });
-// })
+app.get("/api/workouts/:id", (req, res) => {
+  db.Workout.findOne({_id: req.params.id})
+  .then(Workout =>  {
+    res.json(Workout)
+  })
+  .catch(err => {
+    res.json(err);
+  });
+})
 
 app.get("/api/workouts" , (req, res) => {
   db.Workout.find({})
@@ -86,6 +86,39 @@ app.get("/api/workouts" , (req, res) => {
   })
 })
 
+app.post("/api/workouts", (req, res) => {
+  let addedWorkout = {
+    day: new Date(),
+    exercises: []
+  };
+  db.Workout.insert(addedWorkout, (err, data) => {
+    res.json(data);
+  })
+})
+
+app.put("/api/workouts/:id", (req, res) => {
+  const addedExercise = req.body;
+  console.log(req.body, "what's the body")
+  db.Workout.update(
+    {_id: req.params.id},
+    { $push: { exercises: addedExercise }},
+    (err, data) => {
+      res.json(data);
+  })
+})
+
+// app.put("/api/workouts/:id", (req, res) => {
+//   db.Workout.findOne({_id: req.params.id})
+//   .then(Workout =>  {
+//     res.json(Workout)
+//   })
+//   .catch(err => {
+//     res.json(err);
+//   });
+// })
+
+
+app.put("/submit")
 
 
 // app.post("/api/workouts/" ,(req, res) => {
