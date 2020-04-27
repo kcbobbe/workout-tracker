@@ -1,5 +1,4 @@
 const express = require("express");
-const mongojs = require("mongojs");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const path = require("path");
@@ -22,7 +21,7 @@ app.use(express.static("public"));
 
 // mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/workouts";
 mongoose.connect(MONGODB_URI);
 
 // html routes
@@ -40,7 +39,6 @@ app.get("/stats", (req, res) => {
 
 
 app.get("/api/workouts/range" ,(req, res) => {
-  console.log(new Date().setDate(new Date().getDate()-6))
   db.Workout.find(
   ).limit(7)
   .then(Workout => {
@@ -96,7 +94,6 @@ app.post("/api/workouts", ({ body }, res) => {
 
 app.put("/api/workouts/:id", (req, res) => {
   const addedExercise = req.body;
-  console.log(req.body, "what's the body")
   db.Workout.update(
     {_id: req.params.id},
     { $push: { exercises: addedExercise }},
